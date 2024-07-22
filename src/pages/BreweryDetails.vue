@@ -46,9 +46,7 @@
           <q-card class="map-card">
             <q-card-section>
               <div class="text-h6">Location</div>
-              <iframe width="100%" height="300" frameborder="0" style="border:0"
-                :src="`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(fullAddress)}`"
-                allowfullscreen></iframe>
+              <div id="map" style="height: 300px;"></div>
             </q-card-section>
           </q-card>
         </div>
@@ -66,10 +64,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { Brewery } from 'src/types/Brewery';
+import L from 'leaflet';
 
 const route = useRoute();
 
@@ -80,6 +79,26 @@ const fullAddress = computed(() => {
   if (!brewery.value) return '';
   const { street, city, state, postal_code, country } = brewery.value;
   return `${street}, ${city}, ${state} ${postal_code}, ${country}`.trim();
+});
+
+const initMap = () => {
+  if (brewery.value && brewery.value.latitude && brewery.value.longitude) {
+    const map = L.map('map').setView([brewery.value.latitude, brewery.value.longitude], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    L.marker([brewery.value.latitude, brewery.value.longitude]).addTo(map)
+      .bindPopup(brewery.value.name)
+      .openPopup();
+  }
+};
+
+watch(() => brewery.value, (newValue) => {
+  if (newValue) {
+    nextTick(() => {
+      initMap();
+    });
+  }
 });
 
 const getTypeColor = (type: string) => {
@@ -118,6 +137,8 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
+@import 'leaflet/dist/leaflet.css';
+
 .q-page {
   min-height: 100vh;
   display: flex;

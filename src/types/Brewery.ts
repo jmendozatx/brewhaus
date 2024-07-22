@@ -9,4 +9,6 @@ export interface Brewery {
   country: string;
   website_url: string;
   phone: string;
+  latitude: number | null;
+  longitude: number | null;
 }
