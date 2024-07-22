@@ -8,13 +8,14 @@
       <div>{{ brewery.city }}, {{ brewery.state }}</div>
     </q-card-section>
     <q-card-actions align="right">
-      <q-btn flat :to="'/brewery/' + brewery.id">More Details</q-btn>
+      <q-btn flat :to="`/brewery/${brewery.id}`">More Details</q-btn>
     </q-card-actions>
   </q-card>
 </template>
 
 <script setup lang="ts">
-import { Brewery } from 'src/types/Brewery'
+import { defineProps } from 'vue';
+import { Brewery } from 'src/types/Brewery';
 
 defineProps<{
   brewery: Brewery
