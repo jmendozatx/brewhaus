@@ -1,13 +1,24 @@
 <template>
   <q-page class="q-pa-md">
-    <div class="column">
+    <div class="column q-gutter-y-md">
       <h1 class="text-h3 q-mb-md">Breweries</h1>
 
-      <q-input v-model="searchQuery" filled type="search" label="Search breweries" class="q-mb-md">
-        <template v-slot:append>
-          <q-icon name="search" />
-        </template>
-      </q-input>
+      <div class="row q-col-gutter-md">
+        <div class="col-12 col-sm-6">
+          <q-input v-model="searchQuery" filled type="search" label="Search breweries">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </div>
+        <div class="col-12 col-sm-3">
+          <q-select v-model="sortBy" :options="sortOptions" option-value="value" option-label="label" map-options
+            emit-value label="Sort by" filled />
+        </div>
+        <div class="col-12 col-sm-3">
+          <q-select v-model="filterType" :options="breweryTypes" label="Filter by type" filled clearable />
+        </div>
+      </div>
 
       <q-infinite-scroll @load="onLoad" :offset="250" :disable="!canLoadMore">
         <div class="row q-col-gutter-md">
@@ -21,12 +32,18 @@
           </div>
         </template>
       </q-infinite-scroll>
+
+      <div v-if="isLoading" class="row q-col-gutter-md">
+        <div v-for="n in 6" :key="n" class="col-12 col-sm-6 col-md-4">
+          <q-skeleton type="rect" height="200px" />
+        </div>
+      </div>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useQuasar, debounce } from 'quasar';
 import axios from 'axios';
 import BreweryCard from 'components/BreweryCard.vue';
@@ -39,6 +56,28 @@ const page = ref(1);
 const canLoadMore = ref(true);
 const searchQuery = ref('');
 const isLoading = ref(false);
+const sortBy = ref('name');
+const filterType = ref(null);
+
+const sortOptions = [
+  { label: 'Name', value: 'name' },
+  { label: 'Type', value: 'type' },
+  { label: 'City', value: 'city' },
+  { label: 'State', value: 'state' }
+];
+
+const breweryTypes = [
+  'micro',
+  'nano',
+  'regional',
+  'brewpub',
+  'large',
+  'planning',
+  'bar',
+  'contract',
+  'proprietor',
+  'closed'
+];
 
 const fetchBreweries = async (reset = false) => {
   if (reset) {
@@ -52,7 +91,9 @@ const fetchBreweries = async (reset = false) => {
       params: {
         page: page.value,
         per_page: 15,
-        by_name: searchQuery.value
+        by_name: searchQuery.value,
+        sort: sortBy.value,
+        by_type: filterType.value
       }
     });
     breweries.value = reset ? response.data : [...breweries.value, ...response.data];
@@ -65,6 +106,7 @@ const fetchBreweries = async (reset = false) => {
       color: 'negative',
       position: 'top',
       message: 'Failed to fetch breweries. Please try again.',
+      icon: 'report_problem'
     });
   } finally {
     isLoading.value = false;
@@ -76,17 +118,13 @@ const onLoad = async (index: number, done: () => void) => {
   done();
 };
 
-// Debounced search function
 const debouncedFetchBreweries = debounce(fetchBreweries, 300);
 
-// Watch for changes in searchQuery
-watch(searchQuery, () => {
+watch([searchQuery, sortBy, filterType], () => {
   debouncedFetchBreweries(true);
 });
 
-onMounted(() => {
-  fetchBreweries();
-});
+fetchBreweries();
 </script>
 
 <style lang="scss">
