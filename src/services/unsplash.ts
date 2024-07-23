@@ -18,7 +18,7 @@ export const initializeImagePool = async () => {
         query: 'beer brewery',
         orientation: 'landscape',
         client_id: unsplashApiKey,
-        count: 3
+        count: 4
       }
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
