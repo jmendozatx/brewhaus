@@ -11,7 +11,7 @@
       <div class="inner-shadow"></div>
       <q-chip color="white" dark :label="brewery.brewery_type" text-color="black" class="brewery-type-chip" />
     </div>
-    <q-card-section>
+    <q-card-section class="q-pb-none">
       <div class="text-h2">{{ brewery.name }}</div>
       <div>{{ brewery.city }}, {{ brewery.state }}</div>
     </q-card-section>
