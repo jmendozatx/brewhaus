@@ -1,54 +1,39 @@
 <template>
   <q-page class="q-pa-md">
     <div v-if="brewery">
-      <h1 class="text-h3 q-mb-md">{{ brewery.name }}</h1>
-      <div class="row q-col-gutter-md">
+      <div class="row items-center">
+        <h1 class="q-mr-md">{{ brewery.name }}</h1>
+        <q-chip :color="getTypeColor(brewery.brewery_type)" text-color="white">
+          {{ brewery.brewery_type }}
+        </q-chip>
+      </div>
+      <div class="row q-col-gutter-md items-center">
         <div class="col-12 col-md-6">
-          <q-card class="q-mb-md">
-            <q-card-section>
-              <div class="text-h6">Details</div>
-              <q-list>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label caption>Type</q-item-label>
-                    <q-item-label>
-                      <q-chip :color="getTypeColor(brewery.brewery_type)" text-color="white">
-                        {{ brewery.brewery_type }}
-                      </q-chip>
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label caption>Address</q-item-label>
-                    <q-item-label>{{ fullAddress }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item v-if="brewery.phone">
-                  <q-item-section>
-                    <q-item-label caption>Phone</q-item-label>
-                    <q-item-label>{{ brewery.phone }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item v-if="brewery.website_url">
-                  <q-item-section>
-                    <q-item-label caption>Website</q-item-label>
-                    <q-item-label>
-                      <a :href="brewery.website_url" target="_blank">{{ brewery.website_url }}</a>
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-card-section>
-          </q-card>
+          <div id="map" style="height: 300px;"></div>
         </div>
         <div class="col-12 col-md-6">
-          <q-card class="map-card">
-            <q-card-section>
-              <div class="text-h6">Location</div>
-              <div id="map" style="height: 300px;"></div>
-            </q-card-section>
-          </q-card>
+          <q-list>
+            <q-item>
+              <q-item-section>
+                <q-item-label caption>Address</q-item-label>
+                <q-item-label>{{ fullAddress }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item v-if="brewery.phone">
+              <q-item-section>
+                <q-item-label caption>Phone</q-item-label>
+                <q-item-label>{{ brewery.phone }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item v-if="brewery.website_url">
+              <q-item-section>
+                <q-item-label caption>Website</q-item-label>
+                <q-item-label>
+                  <a :href="brewery.website_url" target="_blank">{{ brewery.website_url }}</a>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
         </div>
       </div>
       <q-btn color="primary" icon="arrow_back" label="Back to List" @click="$router.push('/')" class="q-mt-md" />

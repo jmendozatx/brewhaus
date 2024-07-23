@@ -1,4 +1,5 @@
 import axios from 'axios';
+const unsplashApiKey = import.meta.env.VITE_UNSPLASH_API_KEY;
 
 const unsplashApi = axios.create({
   baseURL: 'https://api.unsplash.com',
@@ -16,10 +17,11 @@ export const initializeImagePool = async () => {
       params: {
         query: 'beer brewery',
         orientation: 'landscape',
-        client_id: 'q0p7iNjAt0ux8uH-72vvvGo6HAWjjDehZGMP81GuqD0',
+        client_id: unsplashApiKey,
         count: 3
       }
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     imagePool = response.data.map((item: any) => item.urls.small);
     isInitialized = true;
   } catch (error) {
