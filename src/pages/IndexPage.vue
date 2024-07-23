@@ -1,22 +1,22 @@
 <template>
   <q-page class="q-pa-md">
     <div class="column q-gutter-y-md">
-      <h1 class="text-h3 q-mb-md">Breweries</h1>
+      <h1 class="q-mb-md">Breweries</h1>
 
       <div class="row q-col-gutter-md">
         <div class="col-12 col-sm-6">
-          <q-input v-model="searchQuery" filled type="search" label="Search breweries">
+          <q-input outlined v-model="searchQuery" type="search" label="Search breweries">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
           </q-input>
         </div>
         <div class="col-12 col-sm-3">
-          <q-select v-model="sortBy" :options="sortOptions" option-value="value" option-label="label" map-options
-            emit-value label="Sort by" filled />
+          <q-select outlined v-model="sortBy" :options="sortOptions" option-value="value" option-label="label"
+            map-options emit-value label="Sort by" />
         </div>
         <div class="col-12 col-sm-3">
-          <q-select v-model="filterType" :options="breweryTypes" label="Filter by type" filled clearable />
+          <q-select v-model="filterType" :options="breweryTypes" label="Filter by type" outlined clearable />
         </div>
       </div>
 
@@ -43,11 +43,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useQuasar, debounce } from 'quasar';
 import axios from 'axios';
 import BreweryCard from 'components/BreweryCard.vue';
 import { Brewery } from 'src/types/Brewery';
+import { initializeImagePool, isImagePoolReady } from 'src/services/unsplash';
 
 const $q = useQuasar();
 
@@ -87,6 +88,11 @@ const fetchBreweries = async (reset = false) => {
 
   isLoading.value = true;
   try {
+    // Ensure image pool is initialized before fetching breweries
+    if (!isImagePoolReady()) {
+      await initializeImagePool();
+    }
+
     const response = await axios.get('https://api.openbrewerydb.org/v1/breweries', {
       params: {
         page: page.value,
@@ -124,7 +130,10 @@ watch([searchQuery, sortBy, filterType], () => {
   debouncedFetchBreweries(true);
 });
 
-fetchBreweries();
+onMounted(async () => {
+  await initializeImagePool();
+  fetchBreweries();
+});
 </script>
 
 <style lang="scss">

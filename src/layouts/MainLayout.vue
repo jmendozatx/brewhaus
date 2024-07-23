@@ -1,9 +1,9 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white">
-      <q-toolbar>
-        <q-toolbar-title>
-          <img src="/beer-mug.svg" alt="Brewhaus Logo" width="20">
+    <q-header class="bg-white text-black">
+      <q-toolbar class="column items-center q-py-md">
+        <img src="/beer-mug.svg" alt="Brewhaus Logo" width="50" class="q-mb-sm">
+        <q-toolbar-title class="text-center brewhaus-title">
           Brewhaus
         </q-toolbar-title>
       </q-toolbar>
@@ -13,11 +13,9 @@
       <router-view />
     </q-page-container>
 
-    <q-footer elevated class="bg-grey-8 text-white">
+    <q-footer elevated class=" text-white">
       <q-toolbar>
-        <q-toolbar-title>
-          © 2024 Brewhaus. All rights reserved.
-        </q-toolbar-title>
+        © 2024 Brewhaus. All rights reserved.
       </q-toolbar>
     </q-footer>
   </q-layout>
@@ -27,9 +25,23 @@
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Rye&display=swap');
+
+.q-header {
+  .q-toolbar {
+    min-height: 100px;
+  }
+}
+
+.brewhaus-title {
+  font-family: 'Rye', cursive;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
 .q-page {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 </style>
