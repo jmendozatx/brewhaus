@@ -1,6 +1,6 @@
-# 🍺 BrewHaus Explorer
+# 🍺 BrewHaus
 
-Welcome to BrewHaus Explorer, a web application for discovering and exploring breweries across the United States! This project was created as a take-home assignment for an interview, showcasing modern web development techniques using Quasar, Vue 3, and TypeScript.
+Welcome to BrewHaus, a web application for discovering and exploring breweries across the United States! This project was created as a take-home assignment for an interview, showcasing modern web development techniques using Quasar, Vue 3, and TypeScript.
 
 ## 🌟 Features
 
@@ -29,7 +29,7 @@ Welcome to BrewHaus Explorer, a web application for discovering and exploring br
 
 ## Clone the repository:
 ```bash
-git clone https://github.com/your-username/brewhaus-explorer.git
+git clone https://github.com/jmendozatx/brewhaus.git
 cd brewhaus-explorer
 ```
 
